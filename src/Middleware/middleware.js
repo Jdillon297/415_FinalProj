@@ -28,10 +28,9 @@ function setupBodyParser(app) {
 }
 
 function setupStaticRoutes(app) {
-  // Define static routes based on the routes defined in routes.js
-
   app.use(express.static(router.loginPath));
   app.use(express.static(router.registerPath));
+  app.use(express.static(router.topicsPath));
 }
 
 module.exports = {
