@@ -1,9 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const { MongoClient } = require("mongodb");
 const env = require("dotenv");
-
 const router = require("../router");
 
 function setUpEnvironment() {
