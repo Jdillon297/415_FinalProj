@@ -22,6 +22,18 @@ async function myTopicsService(cookie) {
   return subscriptions;
 }
 
+async function registerService(user_ID, password) {
+  try {
+    const instance = connection.getDB();
+    var users = instance.collection(env.userCollection);
+    const query = { username: user_ID, password: password, subscribed: [] };
+    console.log(query);
+    await users.insertOne(query);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function loginService(user_ID, password) {
   try {
     const instance = connection.getDB();
@@ -43,4 +55,5 @@ async function loginService(user_ID, password) {
 module.exports = {
   myTopicsService,
   loginService,
+  registerService,
 };

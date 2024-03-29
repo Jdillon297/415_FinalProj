@@ -49,6 +49,17 @@ app.post("/post/home", async function (req, res) {
   }
 });
 
+app.post("/post/register", async function (req, res) {
+  const userId = req.body.user_ID;
+  const password = req.body.password;
+  try {
+    await services.registerService(userId, password);
+    res.send("Registered Successfully: " + userId);
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 app.listen(3000);
 
 const pages = {
