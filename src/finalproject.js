@@ -39,15 +39,20 @@ app.get("/createtopic", function (req, res) {
   res.sendFile(pages.createtopic);
 });
 
-app.get("/education", function (req, res) {
-  res.sendFile(pages.education);
+app.get("/alltopics", function (req, res) {
+  res.sendFile(pages.alltopics);
+});
+
+app.get("/show/alltopics", async function (req, res) {
+  const userId = req.cookies.name;
+  var topics = await services.getAllUnsubscribedTopicsService(userId);
+  res.json(topics);
 });
 
 app.post("/post/home", async function (req, res) {
   const userId = req.body.user_ID;
   const password = req.body.password;
   var result = await services.loginService(userId, password);
-
   if (checks.loginErrorCheck(result)) {
     res.sendFile(pages.errorLogin);
   } else {
@@ -68,6 +73,12 @@ app.post("/post/register", async function (req, res) {
   }
 });
 
+app.post("/post/createTopic", async function (req, res) {
+  const title = req.body.title;
+  const description = req.body.description;
+  await services.createTopicService(title, description);
+});
+
 app.get("*", function (req, res) {
   res.status(404).sendFile(pages.notFound404);
 });
@@ -80,6 +91,7 @@ const pages = {
   mytopics: `${router.topicsPath}/mytopics.html`,
   createtopic: `${router.topicsPath}/createtopic.html`,
   showactivity: `${router.topicsPath}/showactivity.html`,
+  alltopics: `${router.topicsPath}/alltopics.html`,
   notFound404: `${router.errorPath}/pageNotFound.html`,
   errorRegister: `${router.errorPath}/registerError.html`,
   errorLogin: `${router.errorPath}/loginError.html`,

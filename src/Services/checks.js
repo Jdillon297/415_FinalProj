@@ -19,8 +19,16 @@ function cookieCheck(cookie) {
   return false;
 }
 
+function createTopicCheck(result) {
+  if (result === 1) {
+    return true;
+  }
+  return false;
+}
+
 module.exports = {
   duplicateUserCheck,
   loginErrorCheck,
   cookieCheck,
+  createTopicCheck,
 };

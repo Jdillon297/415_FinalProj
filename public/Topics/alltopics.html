@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Subscriptions</title>
+  </head>
+  <body>
+    <h1>All Topics</h1>
+    <ul id="subscriptionsList"></ul>
+
+    <script>
+      // Fetch user subscriptions data from the endpoint
+      fetch("/show/alltopics")
+        .then((response) => response.json())
+        .then((data) => {
+          const subscriptions = data;
+
+          // Get the subscriptions list element
+          const subscriptionsList =
+            document.getElementById("subscriptionsList");
+
+          // Clear any existing content
+          subscriptionsList.innerHTML = "";
+
+          // Populate the list with subscription items
+          subscriptions.forEach((subscription) => {
+            const listItem = document.createElement("li");
+            listItem.textContent = subscription.title;
+            subscriptionsList.appendChild(listItem);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          const subscriptionsList =
+            document.getElementById("subscriptionsList");
+          subscriptionsList.innerHTML =
+            "<li>Error fetching data. Please try again later.</li>";
+        });
+    </script>
+  </body>
+</html>
