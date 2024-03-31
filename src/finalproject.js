@@ -76,7 +76,8 @@ app.post("/post/register", async function (req, res) {
 app.post("/post/createTopic", async function (req, res) {
   const title = req.body.title;
   const description = req.body.description;
-  await services.createTopicService(title, description);
+  const response = await services.createTopicService(title, description);
+  res.json(response);
 });
 
 app.get("*", function (req, res) {

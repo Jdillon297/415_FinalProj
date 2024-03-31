@@ -2,6 +2,9 @@ body {
   background-color: #333;
   color: #fff;
   font-family: Arial, sans-serif;
+  background-image: url("https://i.imgur.com/z2gdihV.png");
+  background-position: center;
+  background-size: contain;
 }
 
 .container {
@@ -33,7 +36,7 @@ textarea {
   color: #fff;
 }
 
-button[type="submit"] {
+button[type="button"] {
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
@@ -43,6 +46,6 @@ button[type="submit"] {
   transition: background-color 0.3s;
 }
 
-button[type="submit"]:hover {
+button[type="button"]:hover {
   background-color: #ff8c42;
 }

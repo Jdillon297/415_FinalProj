@@ -1,7 +1,8 @@
-const { query } = require("express");
+const { query, response } = require("express");
 const connection = require("../dataconnection");
 const middleware = require("../Middleware/middleware");
 const User = require("../Models/users");
+const Response = require("../Models/response");
 const env = middleware.setUpEnvironment();
 
 connection.connect();
@@ -69,7 +70,13 @@ async function createTopicService(title, description) {
 
     const query = { title: title, description: description };
     await topics.insertOne(query);
-    return 1;
+
+    const response = new Response("success", "successful action", {
+      title: title,
+      description: description,
+    });
+
+    return response;
   } catch (error) {
     console.error(error);
   }
@@ -98,15 +105,13 @@ async function getAllUnsubscribedTopicsService(user_Id) {
     for (var i = 0; i < allUnSubscribedTopics.length; i++) {
       var topicFound = false;
 
-      // Check if the current topic exists in the subscribedTopics array
       for (var j = 0; j < subscribedTopics.length; j++) {
-        if (allUnSubscribedTopics[i].title === subscribedTopics[j]) {
+        if (allUnSubscribedTopics[i].title === subscribedTopics[j].title) {
           topicFound = true;
           break;
         }
       }
 
-      // If the current topic is not found in subscribedTopics, add it to intersectedTopics
       if (!topicFound) {
         intersectedTopics.push(allUnSubscribedTopics[i]);
       }

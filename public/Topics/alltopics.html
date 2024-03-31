@@ -3,11 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="alltopics.css" />
     <title>User Subscriptions</title>
   </head>
   <body>
     <h1>All Topics</h1>
-    <ul id="subscriptionsList"></ul>
+    <ul id="subscriptionsList" class="card-list"></ul>
 
     <script>
       // Fetch user subscriptions data from the endpoint
@@ -26,7 +27,26 @@
           // Populate the list with subscription items
           subscriptions.forEach((subscription) => {
             const listItem = document.createElement("li");
-            listItem.textContent = subscription.title;
+            listItem.classList.add("card");
+
+            const cardContent = document.createElement("div");
+            cardContent.classList.add("card-content");
+
+            const title = document.createElement("h2");
+            title.textContent = subscription.title;
+            cardContent.appendChild(title);
+
+            const button = document.createElement("button");
+            button.textContent = "Subscribe";
+            button.classList.add("subscribe-button");
+            // Add click event listener for subscribing
+            button.addEventListener("click", () => {
+              // Implement subscription logic here
+              console.log("Subscribed to:", subscription.title);
+            });
+            cardContent.appendChild(button);
+
+            listItem.appendChild(cardContent);
             subscriptionsList.appendChild(listItem);
           });
         })
