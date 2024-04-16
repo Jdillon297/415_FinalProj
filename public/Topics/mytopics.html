@@ -8,6 +8,13 @@
   </head>
   <body>
     <h1>Subscribed Topics</h1>
+    <a href="/"
+      ><img
+        width="20px"
+        height="20px"
+        src="https://www.transparentpng.com/thumb/red-arrow/jzAcjS-file-red-arrow-left-png-wikimedia-commons.png"
+        alt="https://www.transparentpng.com/thumb/red-arrow/jzAcjS-file-red-arrow-left-png-wikimedia-commons.png"
+    /></a>
     <ul id="subscriptionsList" class="card-list"></ul>
 
     <script>
@@ -37,11 +44,40 @@
             cardContent.appendChild(title);
 
             const button = document.createElement("button");
-            button.textContent = "View";
+            button.textContent = "View Posts";
             button.classList.add("view-button");
 
             button.addEventListener("click", () => {
-              console.log("subscribed");
+              const postData = {
+                title: subscription.title,
+              };
+
+              // Endpoint URL to send the POST request to
+              const endpointUrl = "/post/myTopicsPosts"; // Replace with your actual endpoint URL
+
+              // Send POST request
+              fetch(endpointUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(postData),
+              })
+                .then((response) => {
+                  if (response.ok) {
+                    console.log("POST request sent successfully!");
+                    // Handle further actions upon successful request
+                    document.location.href = `/myTopicsPosts?title=${encodeURIComponent(
+                      postData.title
+                    )}`;
+                  } else {
+                    console.error("Failed to send POST request");
+                    // Handle errors here
+                  }
+                })
+                .catch((error) => {
+                  console.error("Error sending POST request:", error);
+                });
             });
 
             cardContent.appendChild(button);

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Display Posts</title>
+    <style>
+      .card {
+        width: 300px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+      }
+      .card-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .card-description {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .card-topic {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 10px;
+      }
+      .card-username {
+        font-size: 14px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="postCardsContainer"></div>
+
+    <script>
+      // Function to parse query parameters from URL
+      function getQueryParam(param) {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get(param);
+      }
+
+      // Get the postName from the query parameter 'title'
+      const postName = getQueryParam("title");
+
+      // Display the postName in the HTML
+      const postCardsContainer = document.getElementById("postCardsContainer");
+
+      async function sendPostRequest(postName) {
+        try {
+          const response = await fetch("/post/Posts", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ title: postName }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch posts");
+          }
+
+          const responseData = await response.json();
+          console.log(responseData); // Log the JSON response
+
+          // Clear previous content
+          postCardsContainer.innerHTML = "";
+
+          // Create card for each post in the response data
+          responseData.forEach((post) => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            const title = document.createElement("div");
+            title.className = "card-title";
+            title.textContent = post.Description;
+
+            const description = document.createElement("div");
+            description.className = "card-description";
+            description.textContent = `Description: ${post.Description}`;
+
+            const topic = document.createElement("div");
+            topic.className = "card-topic";
+            topic.textContent = `Topic: ${post.topic_name}`;
+
+            const username = document.createElement("div");
+            username.className = "card-username";
+            username.textContent = `Username: ${post.username}`;
+
+            card.appendChild(title);
+            card.appendChild(description);
+            card.appendChild(topic);
+            card.appendChild(username);
+
+            postCardsContainer.appendChild(card);
+          });
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      if (postName) {
+        sendPostRequest(postName);
+      } else {
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "Post Name not found in URL";
+        postCardsContainer.appendChild(errorMessage);
+      }
+    </script>
+  </body>
+</html>
