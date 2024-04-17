@@ -75,6 +75,21 @@ app.post("/post/home", async function (req, res) {
   }
 });
 
+app.post("/post/createPost", async function (req, res) {
+  const postContent = req.body.Description;
+  console.log(postContent);
+  const topic_name = req.body.topic;
+  console.log(topic_name);
+  const username = req.cookies.name;
+  const Post = {
+    Description: postContent,
+    topic_name: topic_name,
+    username: username,
+  };
+  await services.createPost(Post);
+  res.sendStatus(200);
+});
+
 app.post("/post/register", async function (req, res) {
   const userId = req.body.user_ID;
   const password = req.body.password;

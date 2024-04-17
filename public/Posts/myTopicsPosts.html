@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Display Posts</title>
     <style>
+      body {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+      }
+      .form-container {
+        display: flex;
+        justify-content: center;
+      }
       .card {
         width: 300px;
         background-color: #fff;
@@ -35,7 +45,12 @@
   </head>
   <body>
     <div id="postCardsContainer"></div>
+    <form action="" method="POST">
+      <label for="post">Contribute Please</label>
+      <input type="text" name="post" id="post" />
 
+      <button type="button" onclick="submitPost()">submit</button>
+    </form>
     <script>
       // Function to parse query parameters from URL
       function getQueryParam(param) {
@@ -109,6 +124,39 @@
         const errorMessage = document.createElement("p");
         errorMessage.textContent = "Post Name not found in URL";
         postCardsContainer.appendChild(errorMessage);
+      }
+
+      function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+      }
+
+      async function submitPost() {
+        const title = getQueryParam("title");
+        const description = document.getElementById("post").value;
+        const username = getCookie("name");
+        const post = {
+          topic: title,
+          Description: description,
+        };
+        const response = await fetch("/post/createPost", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(post),
+        });
+        if (response.ok) {
+          window.location.reload();
+        }
+        // .then((response) => {
+        //   alert("Successfully created a topic.");
+        // })
+
+        // .catch((error) => {
+        //   console.error("Error:", error);
+        // });
       }
     </script>
   </body>
