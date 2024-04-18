@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="mytopics.css" />
+    <link rel="stylesheet" href="alltopics.css" />
     <title>User Subscriptions</title>
   </head>
   <body>
-    <h1>Subscribed Topics</h1>
+    <h1>All Topics</h1>
     <a href="/"
       ><img
         width="20px"
@@ -19,10 +19,10 @@
 
     <script>
       // Fetch user subscriptions data from the endpoint
-      fetch("/mytopics/user")
+      fetch("/show/alltopics")
         .then((response) => response.json())
         .then((data) => {
-          const subscriptions = data.subscriptions;
+          const subscriptions = data;
 
           // Get the subscriptions list element
           const subscriptionsList =
@@ -44,53 +44,26 @@
             cardContent.appendChild(title);
 
             const button = document.createElement("button");
-            button.textContent = "View Posts";
-            button.classList.add("view-button");
+            button.textContent = "Subscribe";
+            button.classList.add("subscribe-button");
+            button.addEventListener("click", async () => {
+              // Implement subscription logic here
+              console.log("Subscribed to:", subscription.title);
 
-            button.addEventListener("click", () => {
-              const postData = {
-                title: subscription.title,
-              };
-
-              // Endpoint URL to send the POST request to
-              const endpointUrl = "/post/myTopicsPosts"; // Replace with your actual endpoint URL
-
-              // Send POST request
-              fetch(endpointUrl, {
+              const response = await fetch("/post/subscribe", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify(postData),
-              })
-                .then((response) => {
-                  if (response.ok) {
-                    console.log("POST request sent successfully!");
-                    // Handle further actions upon successful request
-                    document.location.href = `/myTopicsPosts?title=${encodeURIComponent(
-                      postData.title
-                    )}`;
-                  } else {
-                    console.error("Failed to send POST request");
-                    // Handle errors here
-                  }
-                })
-                .catch((error) => {
-                  console.error("Error sending POST request:", error);
-                });
+                body: JSON.stringify({ title: subscription.title }),
+              });
+              if (response.ok) {
+                window.location.reload();
+              }
             });
-            const unSubButton = document.createElement("button");
-            unSubButton.textContent = "Unsubscribe";
-            unSubButton.classList.add("view-button");
-
-            unSubButton.addEventListener("click", () => {
-              alert("Unsubscribed");
-            });
-
             cardContent.appendChild(button);
-            cardContent.appendChild(unSubButton);
-            listItem.appendChild(cardContent);
 
+            listItem.appendChild(cardContent);
             subscriptionsList.appendChild(listItem);
           });
         })

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Display Posts</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        background-image: url("https://i.imgur.com/z2gdihV.png");
+        background-position: center;
+        background-size: contain;
+        align-items: center;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+      }
+      .post-container {
+        width: 80%;
+      }
+      .card {
+        width: 57%;
+        background-color: #1a1a1a;
+        color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+      }
+
+      .card-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .card-description {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+
+      .card-topic,
+      .card-username {
+        font-size: 14px;
+        color: #ff5733; /* Adjusted color to match theme */
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ff5733;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button[type="button"] {
+        background-color: #ff5733;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button[type="button"]:hover {
+        background-color: #ff8c42;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="post-container">
+      <a href="/mytopics"
+        ><img
+          width="20px"
+          height="20px"
+          src="https://www.transparentpng.com/thumb/red-arrow/jzAcjS-file-red-arrow-left-png-wikimedia-commons.png"
+          alt="https://www.transparentpng.com/thumb/red-arrow/jzAcjS-file-red-arrow-left-png-wikimedia-commons.png"
+      /></a>
+      <div id="postCardsContainer"></div>
+    </div>
+
+    <form action="" method="POST">
+      <label for="post">Contribute Please</label>
+      <input type="text" name="post" id="post" />
+
+      <button type="button" onclick="submitPost()">submit</button>
+    </form>
+    <script>
+      // Function to parse query parameters from URL
+      function getQueryParam(param) {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        return urlParams.get(param);
+      }
+
+      // Get the postName from the query parameter 'title'
+      const postName = getQueryParam("title");
+
+      // Display the postName in the HTML
+      const postCardsContainer = document.getElementById("postCardsContainer");
+
+      async function sendPostRequest(postName) {
+        try {
+          const response = await fetch("/post/Posts", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ title: postName }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch posts");
+          }
+
+          const responseData = await response.json();
+          console.log(responseData); // Log the JSON response
+
+          // Clear previous content
+          postCardsContainer.innerHTML = "";
+
+          // Create card for each post in the response data
+          responseData.forEach((post) => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            const title = document.createElement("div");
+            title.className = "card-title";
+            title.textContent = post.Description;
+
+            const description = document.createElement("div");
+            description.className = "card-description";
+            description.textContent = `Description: ${post.Description}`;
+
+            const topic = document.createElement("div");
+            topic.className = "card-topic";
+            topic.textContent = `Topic: ${post.topic_name}`;
+
+            const username = document.createElement("div");
+            username.className = "card-username";
+            username.textContent = `Username: ${post.username}`;
+
+            card.appendChild(title);
+            card.appendChild(description);
+            card.appendChild(topic);
+            card.appendChild(username);
+
+            postCardsContainer.appendChild(card);
+            postCardsContainer.style.overflow = "auto";
+            postCardsContainer.style.maxHeight = "60vh";
+          });
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      }
+
+      if (postName) {
+        sendPostRequest(postName);
+      } else {
+        const errorMessage = document.createElement("p");
+        errorMessage.textContent = "Post Name not found in URL";
+        postCardsContainer.appendChild(errorMessage);
+      }
+
+      function getCookie(name) {
+        var value = "; " + document.cookie;
+        var parts = value.split("; " + name + "=");
+        if (parts.length == 2) return parts.pop().split(";").shift();
+      }
+
+      async function submitPost() {
+        const title = getQueryParam("title");
+        const description = document.getElementById("post").value;
+        const username = getCookie("name");
+        const post = {
+          topic: title,
+          Description: description,
+        };
+        const response = await fetch("/post/createPost", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(post),
+        });
+        if (response.status == 200) {
+          window.location.reload();
+        }
+      }
+    </script>
+  </body>
+</html>
