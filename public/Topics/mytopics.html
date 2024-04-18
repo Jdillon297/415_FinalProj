@@ -79,9 +79,16 @@
                   console.error("Error sending POST request:", error);
                 });
             });
+            const unSubButton = document.createElement("button");
+            unSubButton.textContent = "Unsubscribe";
+            unSubButton.classList.add("view-button");
+
+            unSubButton.addEventListener("click", () => {
+              alert("Unsubscribed");
+            });
 
             cardContent.appendChild(button);
-
+            cardContent.appendChild(unSubButton);
             listItem.appendChild(cardContent);
 
             subscriptionsList.appendChild(listItem);

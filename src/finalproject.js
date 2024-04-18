@@ -3,6 +3,7 @@ const middleware = require("./Middleware/middleware");
 const router = require("./router");
 const services = require("./Services/services");
 const checks = require("./Services/checks");
+const Response = require("../src/Models/response");
 var app = express();
 
 middleware.setupStaticRoutes(app);
@@ -60,7 +61,7 @@ app.post("/post/myTopicsPosts", async function (req, res) {
 
 app.post("/post/Posts", async function (req, res) {
   const topic_name = req.body.title;
-  const topicsPosts = await services.getAllPostsByTopicName(topic_name);
+  const topicsPosts = await services.getAllPostsByTopicNameService(topic_name);
   res.json(topicsPosts);
 });
 app.post("/post/home", async function (req, res) {
@@ -75,6 +76,14 @@ app.post("/post/home", async function (req, res) {
   }
 });
 
+app.post("/post/subscribe", async function (req, res) {
+  const topic_name = req.body.title;
+  const username = req.cookies.name;
+  console.log(topic_name);
+  await services.subscibeToTopicService(username, topic_name);
+  res.sendStatus(200);
+});
+
 app.post("/post/createPost", async function (req, res) {
   const postContent = req.body.Description;
   console.log(postContent);
@@ -86,8 +95,9 @@ app.post("/post/createPost", async function (req, res) {
     topic_name: topic_name,
     username: username,
   };
-  await services.createPost(Post);
-  res.sendStatus(200);
+  await services.createPostService(Post);
+  const response = new Response("ok", "Successful", 200);
+  res.send(response);
 });
 
 app.post("/post/register", async function (req, res) {
@@ -107,15 +117,9 @@ app.post("/post/createTopic", async function (req, res) {
   const description = req.body.description;
   const cookie = req.cookies.name;
   const response = await services.createTopicService(title, description);
-  if (response.message === "success") {
-    await services.subscribeToTopicService(cookie, {
-      title: title,
-      description: description,
-    });
-    res.json(response);
-  } else {
-    res.send("error creating topic");
-  }
+  console.log(response);
+  await services.subscibeToTopicService(cookie, title);
+  res.json(response);
 });
 
 app.get("/logout", async function (req, res) {

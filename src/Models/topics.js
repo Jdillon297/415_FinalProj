@@ -5,3 +5,4 @@ class Topic {
     this.description = description;
   }
 }
+module.exports = Topic;

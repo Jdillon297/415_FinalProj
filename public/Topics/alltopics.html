@@ -46,10 +46,20 @@
             const button = document.createElement("button");
             button.textContent = "Subscribe";
             button.classList.add("subscribe-button");
-            // Add click event listener for subscribing
-            button.addEventListener("click", () => {
+            button.addEventListener("click", async () => {
               // Implement subscription logic here
               console.log("Subscribed to:", subscription.title);
+
+              const response = await fetch("/post/subscribe", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ title: subscription.title }),
+              });
+              if (response.ok) {
+                window.location.reload();
+              }
             });
             cardContent.appendChild(button);
 

@@ -37,7 +37,9 @@ h1 {
 
 .card-content {
   display: flex;
+  text-wrap: nowrap;
   justify-content: space-between;
+  text-align: center;
   width: 25%;
   padding: 20px;
 }
@@ -52,8 +54,10 @@ h2 {
   color: #fff;
   border: none;
   padding: 10px 20px;
+  margin: 10px;
   border-radius: 4px;
   cursor: pointer;
+  max-height: fit-content;
   transition: background-color 0.3s;
 }
 

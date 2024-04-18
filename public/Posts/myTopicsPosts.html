@@ -9,42 +9,79 @@
         display: flex;
         justify-content: center;
         flex-direction: column;
+        background-image: url("https://i.imgur.com/z2gdihV.png");
+        background-position: center;
+        background-size: contain;
         align-items: center;
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
       }
-      .form-container {
-        display: flex;
-        justify-content: center;
+      .post-container {
+        width: 80%;
       }
       .card {
-        width: 300px;
-        background-color: #fff;
+        width: 57%;
+        background-color: #1a1a1a;
+        color: #fff;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
         padding: 20px;
       }
+
       .card-title {
         font-size: 20px;
         font-weight: bold;
         margin-bottom: 10px;
       }
+
       .card-description {
         font-size: 16px;
         margin-bottom: 10px;
       }
-      .card-topic {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 10px;
-      }
+
+      .card-topic,
       .card-username {
         font-size: 14px;
-        color: #666;
+        color: #ff5733; /* Adjusted color to match theme */
+      }
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ff5733;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button[type="button"] {
+        background-color: #ff5733;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button[type="button"]:hover {
+        background-color: #ff8c42;
       }
     </style>
   </head>
   <body>
-    <div id="postCardsContainer"></div>
+    <div class="post-container">
+      <a href="/mytopics"
+        ><img
+          width="20px"
+          height="20px"
+          src="https://www.transparentpng.com/thumb/red-arrow/jzAcjS-file-red-arrow-left-png-wikimedia-commons.png"
+          alt="https://www.transparentpng.com/thumb/red-arrow/jzAcjS-file-red-arrow-left-png-wikimedia-commons.png"
+      /></a>
+      <div id="postCardsContainer"></div>
+    </div>
+
     <form action="" method="POST">
       <label for="post">Contribute Please</label>
       <input type="text" name="post" id="post" />
@@ -112,6 +149,8 @@
             card.appendChild(username);
 
             postCardsContainer.appendChild(card);
+            postCardsContainer.style.overflow = "auto";
+            postCardsContainer.style.maxHeight = "60vh";
           });
         } catch (error) {
           console.error("Error:", error);
@@ -147,16 +186,9 @@
           },
           body: JSON.stringify(post),
         });
-        if (response.ok) {
+        if (response.status == 200) {
           window.location.reload();
         }
-        // .then((response) => {
-        //   alert("Successfully created a topic.");
-        // })
-
-        // .catch((error) => {
-        //   console.error("Error:", error);
-        // });
       }
     </script>
   </body>

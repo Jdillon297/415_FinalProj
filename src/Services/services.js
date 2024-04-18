@@ -3,6 +3,7 @@ const connection = require("../dataconnection");
 const middleware = require("../Middleware/middleware");
 const User = require("../Models/users");
 const Response = require("../Models/response");
+const Topic = require("../Models/topics");
 const env = middleware.setUpEnvironment();
 
 connection.connect();
@@ -63,31 +64,6 @@ async function loginService(user_ID, password) {
   }
 }
 
-async function subscribeToTopicService(cookie, topic) {
-  try {
-    const instance = connection.getDB();
-    const users = instance.collection(env.userCollection);
-    const topics = instance.collection(env.topicCollection);
-    const findQuery = { username: cookie };
-    const foundUser = users.findOne(findQuery);
-    const user = new User(
-      foundUser._id,
-      foundUser.username,
-      foundUser.password,
-      foundUser.subscribed
-    );
-
-    user.subscribed.push(topic);
-
-    await users.updateOne(
-      { _id: ObjectId(user._id) },
-      { $set: { subscribed: user.subscribed } }
-    );
-  } catch (error) {
-    console.error(error);
-  }
-}
-
 async function createTopicService(title, description) {
   try {
     const instance = connection.getDB();
@@ -96,7 +72,7 @@ async function createTopicService(title, description) {
     const query = { title: title, description: description };
     await topics.insertOne(query);
 
-    const response = new Response("success", "successful action", {
+    const response = new Response("ok", "successful", {
       title: title,
       description: description,
     });
@@ -148,7 +124,7 @@ async function getAllUnsubscribedTopicsService(user_Id) {
   }
 }
 
-async function getAllPosts() {
+async function getAllPostsService() {
   try {
     const instance = connection.getDB();
     const posts = instance.collection(env.postCollection);
@@ -158,7 +134,7 @@ async function getAllPosts() {
     return null;
   }
 }
-async function getAllPostsByTopicName(topicName) {
+async function getAllPostsByTopicNameService(topicName) {
   var postsToReturn = [];
   try {
     const instance = connection.getDB();
@@ -176,7 +152,28 @@ async function getAllPostsByTopicName(topicName) {
   return postsToReturn;
 }
 
-async function createPost(post) {
+async function subscibeToTopicService(username, topic) {
+  try {
+    const instance = connection.getDB();
+    const usersCollection = instance.collection(env.userCollection);
+    const topicsCollection = instance.collection(env.topicCollection);
+    const topicToSubscribeTo = await topicsCollection.findOne({ title: topic });
+
+    const lookedUpUser = await usersCollection.findOne({ username: username });
+    lookedUpUser.subscribed.push(topicToSubscribeTo);
+    const user = mapToUserModel(lookedUpUser);
+
+    // Save the updated user document back to the database
+    await usersCollection.updateOne(
+      { username: user.username },
+      { $set: { subscribed: user.subscribed } }
+    );
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+async function createPostService(post) {
   try {
     const instance = connection.getDB();
     const postCollection = instance.collection(env.postCollection);
@@ -191,6 +188,21 @@ function getHomePageService(user_ID) {
 
   return html;
 }
+
+function mapToUserModel(lookedUpUser) {
+  const user = new User(
+    lookedUpUser._id,
+    lookedUpUser.username,
+    lookedUpUser.password,
+    lookedUpUser.subscribed
+  );
+  return user;
+}
+function mapToTopicModel(topic) {
+  const model = new Topic(topic._id, topic.name, topic.description);
+  return model;
+}
+
 module.exports = {
   myTopicsService,
   loginService,
@@ -198,8 +210,8 @@ module.exports = {
   getHomePageService,
   createTopicService,
   getAllUnsubscribedTopicsService,
-  subscribeToTopicService,
-  getAllPosts,
-  getAllPostsByTopicName,
-  createPost,
+  getAllPostsService,
+  getAllPostsByTopicNameService,
+  createPostService,
+  subscibeToTopicService,
 };
