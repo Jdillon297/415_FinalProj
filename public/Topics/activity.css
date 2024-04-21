@@ -1,8 +1,16 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  background-image: url("https://photos.app.goo.gl/tTusn1EKfjyXfks98");
+  background-color: #414141;
+  background-image: url("https://i.imgur.com/vJc2Wad.png");
   background-position: center;
-  background-size: contain;
-  padding: 20px;
+  background-size: 100%;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+h1 {
+  color: #ff5733;
+  text-align: center;
+  margin-bottom: 20px;
 }
