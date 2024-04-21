@@ -23,7 +23,7 @@ app.get("/", function (req, res) {
 app.get("/register", function (req, res) {
   res.sendFile(pages.register);
 });
-app.get("/showactivity", function (req, res) {
+app.get("/activity", function (req, res) {
   res.sendFile(pages.showactivity);
 });
 
