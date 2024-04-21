@@ -24,7 +24,7 @@ app.get("/register", function (req, res) {
   res.sendFile(pages.register);
 });
 app.get("/activity", function (req, res) {
-  res.sendFile(pages.showactivity);
+  res.sendFile(pages.activity);
 });
 
 app.get("/mytopics", function (req, res) {
