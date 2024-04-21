@@ -140,7 +140,7 @@ const pages = {
   register: `${router.registerPath}/register.html`,
   mytopics: `${router.topicsPath}/mytopics.html`,
   createtopic: `${router.topicsPath}/createtopic.html`,
-  showactivity: `${router.topicsPath}/showactivity.html`,
+  activity: `${router.topicsPath}/activity.html`,
   alltopics: `${router.topicsPath}/alltopics.html`,
   myTopicsPosts: `${router.postsPath}/myTopicsPosts.html`,
   notFound404: `${router.errorPath}/pageNotFound.html`,
