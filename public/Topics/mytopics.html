@@ -83,8 +83,17 @@
             unSubButton.textContent = "Unsubscribe";
             unSubButton.classList.add("view-button");
 
-            unSubButton.addEventListener("click", () => {
-              alert("Unsubscribed");
+            unSubButton.addEventListener("click", async () => {
+              const response = await fetch("/post/unsubscribe", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ title: subscription.title }),
+              });
+              if (response.ok) {
+                window.location.reload();
+              }
             });
 
             cardContent.appendChild(button);

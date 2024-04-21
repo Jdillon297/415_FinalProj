@@ -29,6 +29,7 @@ function setupStaticRoutes(app) {
   app.use(express.static(router.loginPath));
   app.use(express.static(router.registerPath));
   app.use(express.static(router.topicsPath));
+  app.use(express.static(router.postsPath));
 }
 
 module.exports = {
