@@ -33,9 +33,10 @@ async function registerService(user_ID, password) {
     console.log(query);
 
     const checkForDuplicateQuery = { username: user_ID, password: password };
-    const duplicateUser = users.findOne(checkForDuplicateQuery);
+    const duplicateUser = await users.findOne(checkForDuplicateQuery);
 
     if (duplicateUser !== null) {
+      console.log(duplicateUser);
       return -1;
     }
     await users.insertOne(query);
@@ -173,6 +174,25 @@ async function subscibeToTopicService(username, topic) {
   }
 }
 
+async function unsubscribeFromTopicService(username, topic) {
+  try {
+    const instance = connection.getDB();
+    const usersCollection = instance.collection(env.userCollection);
+    const user = await usersCollection.findOne({ username: username });
+    console.log(topic);
+    let topics = user.subscribed.filter((x) => x.title !== topic);
+    console.log(topics);
+    user.subscribed = topics;
+    const modelUser = mapToUserModel(user);
+    await usersCollection.updateOne(
+      { username: modelUser.username },
+      { $set: { subscribed: modelUser.subscribed } }
+    );
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function createPostService(post) {
   try {
     const instance = connection.getDB();
@@ -181,6 +201,12 @@ async function createPostService(post) {
   } catch (error) {
     console.error(error);
   }
+}
+
+function getSuccessfulRegisterPageService() {
+  const html =
+    '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Registration Success</title><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"><style>body {margin: 0;padding: 0;display: flex;justify-content: center;align-items: center;flex-direction: column;font-family: Arial, sans-serif;background-color: #f4f4f4;background-image: url("https://i.imgur.com/z2gdihV.png");background-position: center;background-size: cover;}.container {width: 80%;max-width: 600px;margin: 50px auto;text-align: center;background-color: #1a1a1a;padding: 20px;border-radius: 8px;box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);border: 2px solid #ff5733;color: #fff;}.btn-option {background-color: #ff5733;border-color: #ff5733;}.btn-option:hover {background-color: #ff8c42;border-color: #ff8c42;}.logout-btn {position: fixed;bottom: 20px;right: 20px;}.view-topics-btn {margin-top: 20px;}</style></head><body><div class="container"><h1 class="mb-4">Registration Successful!</h1><p>Thank you for registering.</p><p>You are now part of our community.</p><a href="/"><button class="btn btn-lg btn-option">Login</button></a></div><script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script><script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script></body></html>';
+  return html;
 }
 
 function getHomePageService(user_ID) {
@@ -214,4 +240,6 @@ module.exports = {
   getAllPostsByTopicNameService,
   createPostService,
   subscibeToTopicService,
+  unsubscribeFromTopicService,
+  getSuccessfulRegisterPageService,
 };

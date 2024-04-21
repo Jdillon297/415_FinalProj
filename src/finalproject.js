@@ -3,6 +3,7 @@ const middleware = require("./Middleware/middleware");
 const router = require("./router");
 const services = require("./Services/services");
 const checks = require("./Services/checks");
+const PostModel = require("./Models/post");
 const Response = require("../src/Models/response");
 var app = express();
 
@@ -52,6 +53,11 @@ app.get("/show/alltopics", async function (req, res) {
 app.get("/myTopicsPosts", async function (req, res) {
   res.sendFile(pages.myTopicsPosts);
 });
+app.get("/logout", async function (req, res) {
+  const cookie = req.cookies.name;
+  res.cookie("name", cookie, { maxAge: -1 });
+  res.sendFile(pages.login);
+});
 
 app.post("/post/myTopicsPosts", async function (req, res) {
   const postName = req.body.title;
@@ -84,17 +90,19 @@ app.post("/post/subscribe", async function (req, res) {
   res.sendStatus(200);
 });
 
+app.post("/post/unsubscribe", async function (req, res) {
+  const topic_name = req.body.title;
+  const username = req.cookies.name;
+  console.log(topic_name);
+  await services.unsubscribeFromTopicService(username, topic_name);
+  res.sendStatus(200);
+});
+
 app.post("/post/createPost", async function (req, res) {
   const postContent = req.body.Description;
-  console.log(postContent);
   const topic_name = req.body.topic;
-  console.log(topic_name);
   const username = req.cookies.name;
-  const Post = {
-    Description: postContent,
-    topic_name: topic_name,
-    username: username,
-  };
+  const Post = new PostModel(postContent, topic_name, username);
   await services.createPostService(Post);
   const response = new Response("ok", "Successful", 200);
   res.send(response);
@@ -108,7 +116,7 @@ app.post("/post/register", async function (req, res) {
   if (checks.duplicateUserCheck(result)) {
     res.sendFile(pages.errorRegister);
   } else {
-    res.send("Registered Successfully: " + userId);
+    res.send(services.getSuccessfulRegisterPageService());
   }
 });
 
@@ -117,15 +125,8 @@ app.post("/post/createTopic", async function (req, res) {
   const description = req.body.description;
   const cookie = req.cookies.name;
   const response = await services.createTopicService(title, description);
-  console.log(response);
   await services.subscibeToTopicService(cookie, title);
   res.json(response);
-});
-
-app.get("/logout", async function (req, res) {
-  const cookie = req.cookies.name;
-  res.cookie("name", cookie, { maxAge: -1 });
-  res.sendFile(pages.login);
 });
 
 app.get("*", function (req, res) {

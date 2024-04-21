@@ -1,0 +1,63 @@
+body {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-image: url("https://i.imgur.com/z2gdihV.png");
+  background-position: center;
+  background-size: contain;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+.post-container {
+  width: 80%;
+}
+.card {
+  width: 57%;
+  background-color: #1a1a1a;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  padding: 20px;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-description {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.card-topic,
+.card-username {
+  font-size: 14px;
+  color: #ff5733; /* Adjusted color to match theme */
+}
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ff5733;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button[type="button"] {
+  background-color: #ff5733;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="button"]:hover {
+  background-color: #ff8c42;
+}
