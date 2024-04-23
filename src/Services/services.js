@@ -4,6 +4,7 @@ const middleware = require("../Middleware/middleware");
 const User = require("../Models/users");
 const Response = require("../Models/response");
 const Topic = require("../Models/topics");
+const helper = require("../Services/helpers");
 const env = middleware.setUpEnvironment();
 
 connection.connect();
@@ -26,7 +27,10 @@ async function myActivityService(cookie) {
       user.subscribed.map(async (topic) => {
         try {
           const postArray = await getAllPostsByTopicNameService(topic.title);
-          activityArray.push(postArray);
+          const twoPost = helper.get2Posts(postArray);
+          if (postArray.length >= 1) {
+            activityArray.push(twoPost);
+          }
         } catch (error) {
           console.error(error);
         }
