@@ -9,8 +9,8 @@ const env = middleware.setUpEnvironment();
 connection.connect();
 
 async function myActivityService(cookie) {
-  let activityArray = [];
   try {
+    var activityArray = new Array();
     const db = connection.getDB();
     const collection = db.collection(env.userCollection);
     const username = cookie;
@@ -21,10 +21,17 @@ async function myActivityService(cookie) {
       data.password,
       data.subscribed
     );
-    user.subscribed.forEach(async (topic) => {
-      let postsArray = await getAllPostsByTopicNameService(topic.title);
-      await activityArray.push(postsArray);
-    });
+
+    await Promise.all(
+      user.subscribed.map(async (topic) => {
+        try {
+          const postArray = await getAllPostsByTopicNameService(topic.title);
+          activityArray.push(postArray);
+        } catch (error) {
+          console.error(error);
+        }
+      })
+    );
     console.log(activityArray);
     return activityArray;
   } catch (error) {
@@ -167,7 +174,6 @@ async function getAllPostsByTopicNameService(topicName) {
     allPosts = await post.find({}).toArray();
     for (var i = 0; i < allPosts.length; i++) {
       if (allPosts[i].topic_name === topicName) {
-        console.log(allPosts[i]);
         postsToReturn.push(allPosts[i]);
       }
     }
