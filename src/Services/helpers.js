@@ -1,7 +1,10 @@
 function get2Posts(postsArray) {
   var twoPosts = [];
-  if (postsArray.length > 0) {
-    for (var i = 0; i < 2; i++) {
+  if (postsArray.length >= 1) {
+    if (postsArray.length == 1) {
+      twoPosts.push(postsArray.pop());
+    } else {
+      twoPosts.push(postsArray.pop());
       twoPosts.push(postsArray.pop());
     }
   }

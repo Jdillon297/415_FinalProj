@@ -22,14 +22,14 @@ async function myActivityService(cookie) {
       data.password,
       data.subscribed
     );
-
     await Promise.all(
       user.subscribed.map(async (topic) => {
         try {
-          const postArray = await getAllPostsByTopicNameService(topic.title);
-          const twoPost = helper.get2Posts(postArray);
-          if (postArray.length >= 1) {
-            activityArray.push(twoPost);
+          const postArray = helper.get2Posts(
+            await getAllPostsByTopicNameService(topic.title)
+          );
+          if (postArray.length > 0) {
+            activityArray.push(postArray);
           }
         } catch (error) {
           console.error(error);
