@@ -23,8 +23,15 @@ app.get("/", function (req, res) {
 app.get("/register", function (req, res) {
   res.sendFile(pages.register);
 });
+
 app.get("/activity", function (req, res) {
   res.sendFile(pages.activity);
+});
+
+app.get("/activity/user", async function (req, res) {
+  const cookie = req.cookies.name;
+  var postsArray = await services.myActivityService(cookie);
+  res.json({ postsArray });
 });
 
 app.get("/mytopics", function (req, res) {

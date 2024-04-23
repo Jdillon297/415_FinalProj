@@ -8,6 +8,30 @@ const env = middleware.setUpEnvironment();
 
 connection.connect();
 
+async function myActivityService(cookie) {
+  let activityArray = [];
+  try {
+    const db = connection.getDB();
+    const collection = db.collection(env.userCollection);
+    const username = cookie;
+    const data = await collection.findOne({ username: username });
+    const user = new User(
+      data._id,
+      data.username,
+      data.password,
+      data.subscribed
+    );
+    user.subscribed.forEach(async (topic) => {
+      let postsArray = await getAllPostsByTopicNameService(topic.title);
+      await activityArray.push(postsArray);
+    });
+    console.log(activityArray);
+    return activityArray;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
 async function myTopicsService(cookie) {
   const db = connection.getDB();
   const collection = db.collection(env.userCollection);
@@ -235,6 +259,7 @@ function mapToTopicModel(topic) {
 }
 
 module.exports = {
+  myActivityService,
   myTopicsService,
   loginService,
   registerService,
