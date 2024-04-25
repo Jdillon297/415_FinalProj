@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\public",
+    "\\public\\Login",
+    "\\public\\Register",
+    "\\public\\Topics",
+    "\\src",
+    "\\src\\Middleware",
+    "\\src\\Models",
+    "\\src\\Paths",
+    "\\src\\Services"
+  ],
+  "SelectedNode": "\\src\\Services\\services.js",
+  "PreviewInSolutionExplorer": false
+}

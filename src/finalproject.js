@@ -23,8 +23,15 @@ app.get("/", function (req, res) {
 app.get("/register", function (req, res) {
   res.sendFile(pages.register);
 });
-app.get("/showactivity", function (req, res) {
-  res.sendFile(pages.showactivity);
+
+app.get("/activity", function (req, res) {
+  res.sendFile(pages.activity);
+});
+
+app.get("/activity/user", async function (req, res) {
+  const cookie = req.cookies.name;
+  var postsArray = await services.myActivityService(cookie);
+  res.json({ postsArray });
 });
 
 app.get("/mytopics", function (req, res) {
@@ -140,7 +147,7 @@ const pages = {
   register: `${router.registerPath}/register.html`,
   mytopics: `${router.topicsPath}/mytopics.html`,
   createtopic: `${router.topicsPath}/createtopic.html`,
-  showactivity: `${router.topicsPath}/showactivity.html`,
+  activity: `${router.topicsPath}/activity.html`,
   alltopics: `${router.topicsPath}/alltopics.html`,
   myTopicsPosts: `${router.postsPath}/myTopicsPosts.html`,
   notFound404: `${router.errorPath}/pageNotFound.html`,
