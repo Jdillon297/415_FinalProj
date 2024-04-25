@@ -84,7 +84,7 @@ app.post("/post/home", async function (req, res) {
   if (checks.loginErrorCheck(result)) {
     res.sendFile(pages.errorLogin);
   } else {
-    res.cookie("name", userId, { maxAge: 500000 });
+    res.cookie("name", userId, { maxAge: 50000000 });
     res.send(result);
   }
 });
