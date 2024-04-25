@@ -8,58 +8,43 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
-
-h1 {
-  font-family: papyrus, sans-serif;
-  color: #e05b32;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
 .card-list {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
 }
 
 .card {
+  width: 57%;
   background-color: #1a1a1a;
-  display: flex;
-  justify-content: center;
   color: #fff;
   border-radius: 8px;
-  border: 1px solid;
-  border-color: #ff5733;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
-  transition: 20ms;
-}
-
-.card:hover {
-  border-color: red;
-}
-
-.card-content {
-  display: flex;
-  justify-content: space-between;
-  width: 25%;
   padding: 20px;
 }
 
-h2 {
-  margin-top: 0;
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
   margin-bottom: 10px;
 }
 
-.subscribe-button {
-  background-color: #ff5733;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
+.card-description {
+  font-size: 16px;
+  margin-bottom: 10px;
 }
 
-.subscribe-button:hover {
-  background-color: #ff8c42;
+.card-topic,
+.card-username {
+  font-size: 14px;
+  color: #ff5733; /* Adjusted color to match theme */
+}
+
+a img {
+  width: 20px;
+  height: 20px;
+}
+
+a {
+  margin-bottom: 20px; /* Added margin to match card margin */
 }
