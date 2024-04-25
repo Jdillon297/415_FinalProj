@@ -48,10 +48,6 @@
                 title.className = "card-title";
                 title.textContent = post.Description;
 
-                const description = document.createElement("div");
-                description.className = "card-description";
-                description.textContent = `Description: ${post.Description}`;
-
                 const topic = document.createElement("div");
                 topic.className = "card-topic";
                 topic.textContent = `Topic: ${post.topic_name}`;
@@ -61,7 +57,6 @@
                 username.textContent = `Username: ${post.username}`;
 
                 card.appendChild(title);
-                card.appendChild(description);
                 card.appendChild(topic);
                 card.appendChild(username);
                 activityList.appendChild(card);
