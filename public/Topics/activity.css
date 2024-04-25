@@ -8,19 +8,33 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
 }
+
+h1 {
+  color: #ff5733;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
 .card-list {
   list-style-type: none;
+  list-style-position: inside;
   padding: 0;
 }
 
 .card {
   width: 57%;
-  background-color: #1a1a1a;
-  color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   padding: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #1a1a1a;
+  background-position: auto;
+  justify-content: auto;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .card-title {
