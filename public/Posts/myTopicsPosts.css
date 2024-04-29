@@ -1,13 +1,15 @@
 body {
   display: flex;
+  font-family: "Times New Roman", Times, serif;
   justify-content: center;
   flex-direction: column;
-  background-image: url("https://i.imgur.com/z2gdihV.png");
+  background-image: url("https://i.imgur.com/qWUnZEF.gif");
   background-position: center;
-  background-size: contain;
+  background-size: 120%;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   align-items: center;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
   padding: 20px;
 }
 .post-container {
@@ -55,4 +57,9 @@ button[type="button"] {
 
 button[type="button"]:hover {
   background-color: #ff8c42;
+}
+
+label {
+  font-size: 20px;
+  color: #ee4916;
 }
